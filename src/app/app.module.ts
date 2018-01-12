@@ -11,7 +11,7 @@ import { MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldMo
   MatCardModule, MatIconModule, MatProgressSpinnerModule, MatDialogModule } from '@angular/material';
 
 import 'hammerjs';
-
+// sadece test
 @NgModule({
   declarations: [
     AppComponent
