@@ -1,10 +1,5 @@
-<div class="container"
-    fxLayout="row"
-    fxLayout.sm="column"
-    fxLayout.xs="column"
-    fxLayoutAlign.gt-mat="space-around center"
-    fxLayoutGap="10px" 
-    fxLayoutGap.xs="0">
+<div class="container" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign.gt-mat="space-around center"
+  fxLayoutGap="10px" fxLayoutGap.xs="0">
 
   <div fxFlex="40" *ngIf="dish">
     <mat-card *ngIf="dish">
@@ -13,23 +8,27 @@
           <h3>{{dish.name | uppercase}}</h3>
         </mat-card-title>
       </mat-card-header>
-      <img mat-card-image src={{dish.image}} alt={{dish.name}}>
+      <img mat-card-image src="{{BaseURL + dish.image}}" alt={{dish.name}}>
       <mat-card-content>
         <p>{{dish.description}}
         </p>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-button [routerLink]="['/dishdetail', prev]"><span class="fa fa-chevron-left fa-lg"></span></button>
+        <button mat-button [routerLink]="['/dishdetail', prev]">
+          <span class="fa fa-chevron-left fa-lg"></span>
+        </button>
         <button mat-button (click)="goBack()">BACK</button>
         <button mat-button>LIKE</button>
         <button mat-button>SHARE</button>
         <span class="flex-spacer"></span>
-        <button mat-button [routerLink]="['/dishdetail', next]"><span class="fa fa-chevron-right fa-lg"></span></button>
+        <button mat-button [routerLink]="['/dishdetail', next]">
+          <span class="fa fa-chevron-right fa-lg"></span>
+        </button>
       </mat-card-actions>
     </mat-card>
   </div>
 
-  <div fxFlex="40" *ngIf="dish">
+  <div fxFlex="40" *ngIf="dish" [formGroup]="commentForm">
     <mat-card *ngIf="dish">
       <mat-card-header>
         <mat-card-title>
@@ -42,14 +41,53 @@
             <h4 matLine>{{comment.comment}}</h4>
             <p matLine>{{comment.rating}} Stars</p>
             <p matLine>
-              <span>>-- {{comment.author}} {{comment.date | date: 'MMM dd, yyyy'}}</span>
+              <span>-- {{comment.author}} {{comment.date | date: 'MMM dd, yyyy'}}</span>
             </p>
-          </mat-list-item> 
+          </mat-list-item>
+        </mat-list>
+        <mat-list>
+          <mat-list-item>
+            <p matLine >Comment: {{commentForm.value.comment}}</p>
+            <p matLine >Rating: {{commentForm.value.rating}} Stars</p>
+            <p matLine >Author: {{commentForm.value.author}}</p>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-input-container class="fullWidth" dividerColor="{{(formErrors.author) ? 'warn' : 'primary'}}">
+              <input matInput formControlName="author" placeholder="Name" type="text" required>
+              <mat-hint>
+                <span [hidden]="!(formErrors.author)">
+                  {{formErrors.author}}</span>
+              </mat-hint>
+            </mat-input-container>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-slider formControlName="rating" min="1" max="5" step="1" value="5" required thumbLabel tickInterval="1"></mat-slider>
+            <mat-hint>
+              <span [hidden]="!(formErrors.rating)">
+                {{formErrors.rating}}</span>
+            </mat-hint>
+          </mat-list-item>
+          
+          <mat-input-container class="fullWidth">
+            <textarea matInput formControlName="comment" placeholder="Your Comment" rows=6></textarea>
+            <mat-hint>
+              <span [hidden]="!(formErrors.comment)">
+                {{formErrors.comment}}</span>
+            </mat-hint>
+          </mat-input-container>
+
+          <mat-list-item>
+            <button type="submit" mat-button class="background-primary text-floral-white" (click)="onSubmit()" [disabled]="commentForm.invalid">
+              Submit
+            </button>
+          </mat-list-item>
         </mat-list>
       </mat-card-content>
     </mat-card>
-  </div>  
+
+  </div>
   <div [hidden]="dish">
-    <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
+    <mat-spinner></mat-spinner>
+    <h4>Loading . . . Please Wait</h4>
   </div>
 </div>
